@@ -15,6 +15,7 @@ public class RotateWheel : MonoBehaviour
     [SerializeField] private float deceleration = 500f;  // Ўвидк≥сть зменшенн€
 
     [SerializeField] private TMP_Text _lastBonus;
+    [SerializeField] private TMP_Text _firstBonus;
 
 
     public event Action<int> OnBonusReceived;
@@ -34,6 +35,7 @@ public class RotateWheel : MonoBehaviour
         _rotate = true;
         receivedBonus = bonusAmount;
         _lastBonus.text = bonusAmount.ToString();
+        _firstBonus.text = bonusAmount.ToString();
     }
 
     private void Update()

@@ -95,7 +95,6 @@ public class Bonus : BaseScreen
             int bonus = _bonuses[index];
             _rotateWheel.Rotate(bonus);
 
-            _getBonus.interactable = false;
         }
         else
         {
