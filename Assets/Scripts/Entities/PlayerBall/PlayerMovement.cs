@@ -35,4 +35,16 @@ public class PlayerMovement : MonoBehaviour
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Trap"))
+        {
+            LevelEvents.LoseLevel();
+        }
+        if(collision.gameObject.layer == LayerMask.NameToLayer("WinPoint"))
+        {
+            LevelEvents.WinLevel();
+        }
+    }
 }

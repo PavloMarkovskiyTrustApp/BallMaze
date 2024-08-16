@@ -23,6 +23,7 @@ public class LevelChooseScreen : BaseScreen
         public Image LevelImage;
         public Sprite LevelDefault;
         public Sprite LevelPressed;
+        public Sprite LevelClosed;
     }
 
     private void OnDestroy()
@@ -37,28 +38,48 @@ public class LevelChooseScreen : BaseScreen
     public override void Show()
     {
         base.Show();
+        ResetScreen();
         SetLevel();
     }
 
+    private void ResetScreen()
+    {
+        _currentLevel = 0;
+        foreach (LevelData level in _levels)
+        {
+            level.LevelImage.sprite = level.LevelClosed;
+            level.IsPressed = false;            
+        }
+    }
     private void Subscribe()
     {
+        LevelEvents.OnLevelsDone += DoneLevel;
         for(int i = 0; i < _levelButtons.Length; i++)
         {
             int index = i;
             _levelButtons[index].onClick.AddListener(() => PressLevelButton(index));
         }
+
+        _Play.onClick.AddListener(StartLevel);
     }
     private void Unsubscribe()
     {
+        LevelEvents.OnLevelsDone -= DoneLevel;
         for (int i = 0; i < _levelButtons.Length; i++)
         {
             int index = i;
             _levelButtons[index].onClick.RemoveListener(() => PressLevelButton(index));
         }
+        _Play.onClick.RemoveListener(StartLevel);
+    }
+    private void StartLevel()
+    {
+        Hide();
+        LevelEvents.StartLevel(_currentLevel);
     }
     public void SetLevel()
     {
-        _currentLevel = 0;
+       
         _levels[_currentLevel].IsPressed = true;
         _currentLevelText.text = $"Level {_currentLevel+1}";
         AcembleLevelButtons();
@@ -99,5 +120,10 @@ public class LevelChooseScreen : BaseScreen
             }
         }
 
+    }
+    private void DoneLevel(int levelIndex)
+    {
+        _levels[levelIndex].IsDone = true;
+        _levels[levelIndex+1].IsOpened = true;
     }
 }
