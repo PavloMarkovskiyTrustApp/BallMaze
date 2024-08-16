@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Systems.Resources;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +11,7 @@ namespace Assets.Scripts.UI.Popups
         [SerializeField] private Button _nextLevel;
         [SerializeField] private Button _mainMenu;
         [SerializeField] private LevelManager _levelManager;
+        [SerializeField] private TMP_Text _rewardCoins;
 
         public override void MainButtonPressed()
         {
@@ -19,6 +22,12 @@ namespace Assets.Scripts.UI.Popups
         {
             base.Init();
             Subscribe();
+        }
+        public override void Show()
+        {
+            base.Show();
+            _rewardCoins.text = "200";
+            ResourcesBank.Instance.ModifyResource(ResourceTypes.Coins, 200);
         }
         public void OnDestroy()
         {

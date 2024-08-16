@@ -1,3 +1,4 @@
+using Assets.Scripts.Systems.Events;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -9,6 +10,8 @@ public class LevelChooseScreen : BaseScreen
     [SerializeField] private List<LevelData> _levels;
     [SerializeField] private int _currentLevel = 0;
     [SerializeField] private TMP_Text _currentLevelText;
+    [Header("Text")]
+    [SerializeField] private TMP_Text _coins;
 
     [SerializeField] private Button _Play;
     [SerializeField] private Button[] _levelButtons;
@@ -34,6 +37,7 @@ public class LevelChooseScreen : BaseScreen
     {
         base.Initialize(uiManager);
         Subscribe();
+        StartResourceSet();
     }
     public override void Show()
     {
@@ -53,6 +57,7 @@ public class LevelChooseScreen : BaseScreen
     }
     private void Subscribe()
     {
+        ResourceEvents.OnResourceModified += ModifyResource;
         LevelEvents.OnLevelsDone += DoneLevel;
         for(int i = 0; i < _levelButtons.Length; i++)
         {
@@ -64,6 +69,7 @@ public class LevelChooseScreen : BaseScreen
     }
     private void Unsubscribe()
     {
+        ResourceEvents.OnResourceModified -= ModifyResource;
         LevelEvents.OnLevelsDone -= DoneLevel;
         for (int i = 0; i < _levelButtons.Length; i++)
         {
@@ -125,5 +131,17 @@ public class LevelChooseScreen : BaseScreen
     {
         _levels[levelIndex].IsDone = true;
         _levels[levelIndex+1].IsOpened = true;
+    }
+    private void ModifyResource(ResourceTypes resource, int amount)
+    {
+        switch (resource)
+        {
+            case ResourceTypes.Coins: _coins.text = amount.ToString(); break;
+        }
+    }
+
+    private void StartResourceSet()
+    {
+        _coins.text = SaveManager.LoadResource(ResourceTypes.Coins).ToString();
     }
 }

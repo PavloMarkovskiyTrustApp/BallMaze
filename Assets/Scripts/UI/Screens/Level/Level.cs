@@ -42,6 +42,5 @@ public class Level : BaseScreen
     private void WinLevel()
     {
         _winPopup.Show();
-       
     }
 }
