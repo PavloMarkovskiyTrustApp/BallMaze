@@ -38,7 +38,7 @@ namespace Assets.Scripts.Game.Achievements
         }
         public void Achieve(AchievementTypes achievementType)
         {
-            
+            Debug.Log("achieved: " + achievementType);
             foreach(AchievementTypes achievement in _achieved)
             {
                 if(achievement == achievementType)

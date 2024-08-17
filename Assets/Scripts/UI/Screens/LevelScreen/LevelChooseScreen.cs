@@ -1,3 +1,4 @@
+using Assets.Scripts.Game.Achievements;
 using Assets.Scripts.Systems.Events;
 using System;
 using System.Collections.Generic;
@@ -90,7 +91,7 @@ public class LevelChooseScreen : BaseScreen
         _levels[_currentLevel].IsPressed = true;
         _currentLevelText.text = $"Level {_currentLevel+1}";
         LoadData();
-        AcembleLevelButtons();
+        AssembleLevelButtons();
     }
     
     private void PressLevelButton(int index)
@@ -105,7 +106,7 @@ public class LevelChooseScreen : BaseScreen
 
             _levels[_currentLevel].IsPressed = true;
 
-            AcembleLevelButtons();
+            AssembleLevelButtons();
         }  
     }
 
@@ -126,7 +127,7 @@ public class LevelChooseScreen : BaseScreen
         }
     }
 
-    private void AcembleLevelButtons()
+    private void AssembleLevelButtons()
     {
         foreach (LevelData level in _levels)
         {
@@ -161,6 +162,7 @@ public class LevelChooseScreen : BaseScreen
         }
         doneLevels.Add(levelIndex);
         SaveManager.SaveIntList(SaveKeys.DoneLevelList, doneLevels);
+        CheckAchievements(levelIndex);
     }
     private void ModifyResource(ResourceTypes resource, int amount)
     {
@@ -173,5 +175,23 @@ public class LevelChooseScreen : BaseScreen
     private void StartResourceSet()
     {
         _coins.text = SaveManager.LoadResource(ResourceTypes.Coins).ToString();
+    }
+
+    private void CheckAchievements(int finishedLevel)
+    {
+        if(finishedLevel == 0)
+        {
+            AchievementEvents.Achieve(AchievementTypes.SwiftNavigator);
+        }
+        if (finishedLevel == 4)
+        {
+            AchievementEvents.Achieve(AchievementTypes.SkilledPilot);
+        }
+        if (finishedLevel == 9)
+        {
+            AchievementEvents.Achieve(AchievementTypes.MazeChampion);
+            AchievementEvents.Achieve(AchievementTypes.LevelMaster);
+        }
+
     }
 }

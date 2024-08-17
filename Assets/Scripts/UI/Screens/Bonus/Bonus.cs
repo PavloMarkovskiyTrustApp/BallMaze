@@ -1,4 +1,5 @@
 
+using Assets.Scripts.Game.Achievements;
 using Assets.Scripts.Systems.Events;
 using System;
 using System.Collections;
@@ -94,6 +95,7 @@ public class Bonus : BaseScreen
             int index = UnityEngine.Random.Range(0, _bonuses.Length);
             int bonus = _bonuses[index];
             _rotateWheel.Rotate(bonus);
+            CheckAchievements(bonus);
 
         }
         else
@@ -152,6 +154,28 @@ public class Bonus : BaseScreen
             yield return new WaitForSeconds(1f);
             TimeSpan timeLeft = GetTimeUntilNextSpin();
             _bonusTimerText.text = $"{timeLeft.Hours}:{timeLeft.Minutes}:{timeLeft.Seconds}";
+        }
+    }
+
+    private void CheckAchievements(int receivedBonus)
+    {
+        if(receivedBonus == _bonuses[_bonuses.Length-1])
+        {
+            AchievementEvents.Achieve(AchievementTypes.JackpotWinner);
+        }
+        if(SaveManager.IsSaved(SaveKeys.TotalBonuses))
+        {
+            if(SaveManager.LoadInt(SaveKeys.TotalBonuses) == 5)
+            {
+                AchievementEvents.Achieve(AchievementTypes.BonusSeeker);
+            }
+            int bonuses = SaveManager.LoadInt(SaveKeys.TotalBonuses);
+            bonuses++;
+            SaveManager.SaveInt(SaveKeys.TotalBonuses, bonuses);
+        }
+        else
+        {
+            SaveManager.SaveInt(SaveKeys.TotalBonuses, 1);
         }
     }
 }

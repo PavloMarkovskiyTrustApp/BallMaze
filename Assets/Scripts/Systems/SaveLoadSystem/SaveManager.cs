@@ -140,5 +140,8 @@ public static class SaveManager
 
         PlayerPrefs.DeleteKey(SaveKeys.PlayerAvatarPath);
         PlayerPrefs.DeleteKey(SaveKeys.DoneLevelList);
+
+        PlayerPrefs.DeleteKey(SaveKeys.TotalCoins);
+        PlayerPrefs.DeleteKey(SaveKeys.TotalBonuses);
     }
 }

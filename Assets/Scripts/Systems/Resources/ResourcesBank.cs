@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Systems.Events;
+﻿using Assets.Scripts.Game.Achievements;
+using Assets.Scripts.Systems.Events;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,6 +33,18 @@ namespace Assets.Scripts.Systems.Resources
 
             //_apiManager.ChangeScore(SaveManager.LoadResource(ResourceTypes.Coins));
             ResourceEvents.ModifyResource(resource, _resources[resource]);
+
+            if(SaveManager.IsSaved(SaveKeys.TotalCoins))
+            {
+                int newAmount = SaveManager.LoadInt(SaveKeys.TotalCoins);
+                newAmount += amount;
+                SaveManager.SaveInt(SaveKeys.TotalCoins, newAmount);
+            }
+            else
+            {
+                SaveManager.SaveInt(SaveKeys.TotalCoins, amount);
+            }
+            CheckAchievements();
         }
 
         public int GetResource(ResourceTypes resource)
@@ -55,6 +68,24 @@ namespace Assets.Scripts.Systems.Resources
 
         } 
 
+        private void CheckAchievements()
+        {
+            if(SaveManager.IsSaved(SaveKeys.TotalCoins))
+            {
+                if(SaveManager.LoadInt(SaveKeys.TotalCoins) >= 200)
+                {
+                    AchievementEvents.Achieve(AchievementTypes.CoinCollector);
+                }
+                if (SaveManager.LoadInt(SaveKeys.TotalCoins) >= 1000)
+                {
+                    AchievementEvents.Achieve(AchievementTypes.CoinHoarder);
+                }
+                if (SaveManager.LoadInt(SaveKeys.TotalCoins) >= 2000)
+                {
+                    AchievementEvents.Achieve(AchievementTypes.TreasureHunter);
+                }
+            }
+        }
 
     }
 }

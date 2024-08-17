@@ -16,4 +16,8 @@ public static class SaveKeys
 
     public static readonly string DoneLevelList = "DoneLevelList";
 
+    public static readonly string TotalCoins = "TotalCoins";
+
+    public static readonly string TotalBonuses = "TotalBonuses";
+
 }
