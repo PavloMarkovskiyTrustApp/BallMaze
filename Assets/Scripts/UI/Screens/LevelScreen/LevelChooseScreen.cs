@@ -2,6 +2,7 @@ using Assets.Scripts.Systems.Events;
 using System;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -88,6 +89,7 @@ public class LevelChooseScreen : BaseScreen
        
         _levels[_currentLevel].IsPressed = true;
         _currentLevelText.text = $"Level {_currentLevel+1}";
+        LoadData();
         AcembleLevelButtons();
     }
     
@@ -105,6 +107,23 @@ public class LevelChooseScreen : BaseScreen
 
             AcembleLevelButtons();
         }  
+    }
+
+    private void LoadData()
+    {
+       
+        if (SaveManager.IsSaved(SaveKeys.DoneLevelList))
+        {
+            List<int> doneLevels = SaveManager.LoadIntList(SaveKeys.DoneLevelList);
+            for(int i = 0; i < doneLevels.Count; i++)
+            {
+                _levels[doneLevels[i]].IsDone = true;
+                if (i < 9)
+                {
+                    _levels[doneLevels[i] + 1].IsOpened = true;
+                }
+            }
+        }
     }
 
     private void AcembleLevelButtons()
@@ -129,8 +148,19 @@ public class LevelChooseScreen : BaseScreen
     }
     private void DoneLevel(int levelIndex)
     {
+        if (levelIndex < 9)
+        {
+            _levels[levelIndex + 1].IsOpened = true;
+        }
+
         _levels[levelIndex].IsDone = true;
-        _levels[levelIndex+1].IsOpened = true;
+        List<int> doneLevels = new List<int>();
+        if (SaveManager.IsSaved(SaveKeys.DoneLevelList))
+        {
+            doneLevels = SaveManager.LoadIntList(SaveKeys.DoneLevelList);
+        }
+        doneLevels.Add(levelIndex);
+        SaveManager.SaveIntList(SaveKeys.DoneLevelList, doneLevels);
     }
     private void ModifyResource(ResourceTypes resource, int amount)
     {

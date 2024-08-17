@@ -139,6 +139,6 @@ public static class SaveManager
         PlayerPrefs.DeleteKey(SaveKeys.Achievements);
 
         PlayerPrefs.DeleteKey(SaveKeys.PlayerAvatarPath);
-
-}
+        PlayerPrefs.DeleteKey(SaveKeys.DoneLevelList);
+    }
 }

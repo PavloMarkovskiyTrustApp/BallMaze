@@ -14,4 +14,6 @@ public static class SaveKeys
    
     public static readonly string PlayerAvatarPath = "PlayerAvatarPath";
 
+    public static readonly string DoneLevelList = "DoneLevelList";
+
 }

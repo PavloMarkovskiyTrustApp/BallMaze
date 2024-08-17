@@ -28,6 +28,10 @@ namespace Assets.Scripts.UI.Popups
             base.Show();
             _rewardCoins.text = "200";
             ResourcesBank.Instance.ModifyResource(ResourceTypes.Coins, 200);
+            if(_levelManager.CurrentLevel == 9)
+            {
+                _nextLevel.gameObject.SetActive(false);
+            }
         }
         public void OnDestroy()
         {
