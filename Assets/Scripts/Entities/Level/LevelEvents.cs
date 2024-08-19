@@ -12,7 +12,7 @@ public static class LevelEvents
     public static event Action OnLevelClose;
     public static event Action<int> OnLevelTryAgain;
     public static event Action<int> OnLevelNext;
-
+    public static event Action<bool> OnPause;
     public static void DoneLevel(int levelIndex)
     {
         OnLevelsDone?.Invoke(levelIndex);
@@ -40,5 +40,9 @@ public static class LevelEvents
     public static void NextLevel(int levelIndex)
     {
         OnLevelNext?.Invoke(levelIndex);
+    }
+    public static void Pause(bool isPaused)
+    {
+        OnPause?.Invoke(isPaused);
     }
 }

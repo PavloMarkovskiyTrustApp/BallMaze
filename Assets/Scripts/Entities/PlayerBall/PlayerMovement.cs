@@ -5,34 +5,81 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Швидкість руху
-    public float maxSpeed = 10f; // Максимальна швидкість
-    private Rigidbody2D rb;
+    public float moveSpeed = 5f; // Speed of the ball movement
+    public float threshold = 0.1f; // Threshold value to filter out minor fluctuations
+    public float maxSpeed = 10f;
 
+    private Vector3 initialOrientation;
     private Vector2 movement;
+    private Rigidbody2D rb; // Reference to the Rigidbody2D component
 
-    void Start()
+    private bool _isPaused = false;
+    private bool isMobile;
+
+    void OnEnable()
     {
-        // Отримуємо компонент Rigidbody2D
+        LevelEvents.OnPause += Pause;
+        // Capture the initial orientation of the device
+        initialOrientation = Input.acceleration;
+
+        // Get the Rigidbody2D component
         rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            Debug.LogError("Rigidbody2D component not found on the ball.");
+        }
+        isMobile = Application.isMobilePlatform;
+
+    }
+    private void OnDestroy()
+    {
+        LevelEvents.OnPause -= Pause;
     }
 
     void Update()
     {
-        // Отримуємо вхідні дані для руху
-        movement.x = Input.GetAxisRaw("Horizontal");
-        movement.y = Input.GetAxisRaw("Vertical");
-    }
-
-    void FixedUpdate()
-    {
-        // Виконуємо рух з використанням AddForce
-        rb.AddForce(movement.normalized * moveSpeed, ForceMode2D.Impulse);
-
-        // Обмеження швидкості
-        if (rb.velocity.magnitude > maxSpeed)
+       
+        if (!_isPaused)
         {
-            rb.velocity = rb.velocity.normalized * maxSpeed;
+            if (isMobile)
+            {
+                // Get the current orientation
+                Vector3 currentOrientation = Input.acceleration;
+
+                // Calculate the difference between the current and initial orientations
+                Vector3 orientationDelta = currentOrientation - initialOrientation;
+
+                // Calculate the magnitude of the orientation delta
+                float magnitude = orientationDelta.magnitude;
+
+                Vector2 movement = new Vector2(orientationDelta.x, orientationDelta.y).normalized;
+
+                // Apply force to the Rigidbody2D
+                rb.AddForce(movement * moveSpeed);
+                // Limit the speed of the Rigidbody2D
+                if (rb.velocity.magnitude > maxSpeed)
+                {
+                    rb.velocity = rb.velocity.normalized * maxSpeed;
+                }
+            }
+            if (!isMobile)
+            {
+                // Get input data for movement from the keyboard
+                movement.x = Input.GetAxisRaw("Horizontal");
+                movement.y = Input.GetAxisRaw("Vertical");
+                rb.AddForce(movement.normalized * moveSpeed, ForceMode2D.Impulse);
+
+                // Limit the speed
+                if (rb.velocity.magnitude > maxSpeed)
+                {
+                    rb.velocity = rb.velocity.normalized * maxSpeed;
+                }
+            }
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
+
         }
     }
 
@@ -42,9 +89,14 @@ public class PlayerMovement : MonoBehaviour
         {
             LevelEvents.LoseLevel();
         }
-        if(collision.gameObject.layer == LayerMask.NameToLayer("WinPoint"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("WinPoint"))
         {
             LevelEvents.WinLevel();
         }
+    }
+
+    private void Pause(bool isPaused)
+    {
+        _isPaused = isPaused;
     }
 }
