@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class LevelChooseScreen : BaseScreen
 {
+    [SerializeField] private TextManager textManager;
     [SerializeField] private List<LevelData> _levels;
     [SerializeField] private int _currentLevel = 0;
     [SerializeField] private TMP_Text _currentLevelText;
@@ -38,7 +39,7 @@ public class LevelChooseScreen : BaseScreen
     {
         base.Initialize(uiManager);
         Subscribe();
-        StartResourceSet();
+        textManager.StartResourceSet(_coins);
     }
     public override void Show()
     {
@@ -165,16 +166,9 @@ public class LevelChooseScreen : BaseScreen
     }
     private void ModifyResource(ResourceTypes resource, int amount)
     {
-        switch (resource)
-        {
-            case ResourceTypes.Coins: _coins.text = amount.ToString(); break;
-        }
+        textManager.ModifyResource(_coins, amount);
     }
 
-    private void StartResourceSet()
-    {
-        _coins.text = SaveManager.LoadResource(ResourceTypes.Coins).ToString();
-    }
 
     private void CheckAchievements(int finishedLevel)
     {

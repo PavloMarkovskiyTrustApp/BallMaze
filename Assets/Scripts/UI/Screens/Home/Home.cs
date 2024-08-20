@@ -16,6 +16,7 @@ public class Home : BaseScreen
     [SerializeField] private Button _leaders;
     [SerializeField] private Button _bonus;
     [SerializeField] private Button _Play;
+    [SerializeField] private TextManager textManager;
 
     private void OnDestroy()
     {
@@ -25,12 +26,12 @@ public class Home : BaseScreen
     {
         base.Initialize(uiManager);
         Subscribe();
-        StartResourceSet();
+        textManager.StartResourceSet(_coins);
     }
     public override void Show()
     {
         base.Show();
-        StartResourceSet();
+        textManager.StartResourceSet(_coins);
     }
     private void Subscribe()
     {
@@ -57,14 +58,7 @@ public class Home : BaseScreen
 
     private void ModifyResource(ResourceTypes resource, int amount)
     {
-        switch (resource)
-        {
-            case ResourceTypes.Coins: _coins.text = amount.ToString(); break;
-        }
+        textManager.ModifyResource(_coins, amount);
     }
 
-    private void StartResourceSet()
-    {
-        _coins.text = SaveManager.LoadResource(ResourceTypes.Coins).ToString();
-    }
 }
