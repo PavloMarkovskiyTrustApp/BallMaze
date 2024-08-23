@@ -8,7 +8,7 @@ namespace Assets.Scripts.Systems.Resources
 {
     public class ResourcesBank : MonoBehaviour
     {
-       // [SerializeField] private ApiManager _apiManager;
+        [SerializeField] private apiManager _apiManager;
         public static ResourcesBank Instance { get; private set; }
 
         private Dictionary<ResourceTypes, int> _resources = new Dictionary<ResourceTypes, int>();
@@ -31,10 +31,10 @@ namespace Assets.Scripts.Systems.Resources
 
             SaveManager.SaveResource(resource, _resources[resource]);
 
-            //_apiManager.ChangeScore(SaveManager.LoadResource(ResourceTypes.Coins));
+            
             ResourceEvents.ModifyResource(resource, _resources[resource]);
 
-            if(SaveManager.IsSaved(SaveKeys.TotalCoins))
+            if(SaveManager.IsSaved(SaveKeys.TotalCoins) && amount > 0)
             {
                 int newAmount = SaveManager.LoadInt(SaveKeys.TotalCoins);
                 newAmount += amount;
@@ -44,6 +44,7 @@ namespace Assets.Scripts.Systems.Resources
             {
                 SaveManager.SaveInt(SaveKeys.TotalCoins, amount);
             }
+            _apiManager.ChangeScore(SaveManager.LoadInt(SaveKeys.TotalCoins));
             CheckAchievements();
         }
 
