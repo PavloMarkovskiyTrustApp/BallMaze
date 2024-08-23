@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public class Profile : BaseScreen
 {
     [SerializeField] private GameObject _editPopup;
-    //[SerializeField] private ApiManager _apiManager;
+    [SerializeField] private apiManager _apiManager;
     [SerializeField] private TMP_InputField _nameTextInputField;
     [SerializeField] private Button _photoButton;
     [SerializeField] private AvatarManager _avatarManager;
@@ -29,6 +29,10 @@ public class Profile : BaseScreen
     void OnDestroy()
     {
         Unsubscribe();
+    }
+    private void Update()
+    {
+        _nameText.text = _nameTextInputField.text;
     }
     public override void Initialize(UIManager uiManager)
     {
@@ -103,7 +107,7 @@ public class Profile : BaseScreen
     private void SaveNewName()
     {
         SaveManager.SaveString(SaveKeys.PlayerName, _nameTextInputField.text);
-      //  _apiManager.ChangeName(SaveManager.LoadString(SaveKeys.PlayerName));
+        _apiManager.ChangeName(SaveManager.LoadString(SaveKeys.PlayerName));
     }
 
     private void SetName()

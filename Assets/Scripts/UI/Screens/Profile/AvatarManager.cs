@@ -22,7 +22,14 @@ namespace Assets.Scripts.UI.Screens.Variables
                 _playerAvatarMain.texture = NativeCamera.LoadImageAtPath(path, maxSize);
             }
         }
-
+        public void SetPlayerAvatarLeaders()
+        {
+            if (SaveManager.IsSaved(SaveKeys.PlayerAvatarPath))
+            {
+                string path = SaveManager.LoadString(SaveKeys.PlayerAvatarPath);
+                _playerAvatar.texture = NativeCamera.LoadImageAtPath(path, maxSize);
+            }
+        }
         public void TakePicture()
         {
             if (NativeCamera.IsCameraBusy())
