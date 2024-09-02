@@ -163,7 +163,7 @@ PlayerSettings:
   applicationIdentifier:
     Android: com.TrustApp.BallMaze
     Standalone: com.DefaultCompany.2DProject
-    iPhone: com.TrustApp.Ball-Maze
+    iPhone: com.TrustApp.BallMaze
   buildNumber:
     Standalone: 0
     VisionOS: 0

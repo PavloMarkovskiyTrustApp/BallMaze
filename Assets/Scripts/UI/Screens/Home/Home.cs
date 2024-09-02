@@ -40,7 +40,7 @@ public class Home : BaseScreen
         _profile.onClick.AddListener(() => _uiManager.ShowScreen(new Profile()));
         _info.onClick.AddListener(() => _uiManager.ShowScreen(new Info()));
         _leaders.onClick.AddListener(() => _uiManager.ShowScreen(new LeaderBoard()));
-        _bonus.onClick.AddListener(() => _uiManager.ShowScreen(new Bonus()));
+        //_bonus.onClick.AddListener(() => _uiManager.ShowScreen(new Bonus()));
         _Play.onClick.AddListener(() => _uiManager.ShowScreen(new LevelChooseScreen()));
 
     }
@@ -51,7 +51,7 @@ public class Home : BaseScreen
         _profile.onClick.RemoveListener(() => _uiManager.ShowScreen(new Profile()));
         _info.onClick.RemoveListener(() => _uiManager.ShowScreen(new Info()));
         _leaders.onClick.RemoveListener(() => _uiManager.ShowScreen(new LeaderBoard()));
-        _bonus.onClick.RemoveListener(() => _uiManager.ShowScreen(new Bonus()));
+        //_bonus.onClick.RemoveListener(() => _uiManager.ShowScreen(new Bonus()));
         _Play.onClick.RemoveListener(() => _uiManager.ShowScreen(new LevelChooseScreen()));
 
     }

@@ -32,6 +32,7 @@ public class LeaderBoard : BaseScreen
     public override void Show()
     {
         base.Show();
+        CleanLeaderBoard();
         SetLeaderBoard();
     }
     public override void Hide()
@@ -44,6 +45,10 @@ public class LeaderBoard : BaseScreen
     public void RessetLeaderBoard()
     {
         base.Hide();
+        CleanLeaderBoard();
+    }
+    private void CleanLeaderBoard()
+    {
         for (int i = 0; i < _leaders.Count; i++)
         {
             GameObject obj = _leaders[i].gameObject;
